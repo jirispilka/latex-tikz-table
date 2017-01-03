@@ -1,0 +1,162 @@
+% Jiri Spilka, 2013
+% bio.felk.cvut.cz/~spilkaj
+%
+\documentclass[a4paper,11pt,oneside]{report}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx,color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\usepackage[top=2.5cm, bottom=2.5cm, right=2.5cm, left=3cm]{geometry}% set boundary
+
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{microtype} % very small changes -- spacing etc
+\usepackage{booktabs}
+\usepackage{multirow} % multirow v tabulce
+
+\usepackage{tikz}
+
+\newcommand{\drawBox}[3]
+{
+\begin{tikzpicture}
+\def\w{1.5} % width of a box
+\def\x{#1/100*\w} % median value
+\def\xl{#2/100*\w} % lower confidance interval
+\def\xu{#3/100*\w} % upper confidance interval
+\filldraw[fill=gray!#1!white!, draw=black] (0,0) rectangle (\x,0.2); % draw rectangle (black border)
+\draw [gray] (0,0) rectangle (\w,0.2); % fill with the grey
+\draw (\x,0.1) -- (\xu,0.1) -- (\xu,0.15) -- (\xu,0.05); %draw  upper confidance interval
+\draw (\x,0.1) -- (\xl,0.1) -- (\xl,0.15) -- (\xl,0.05); % draw confidance interval
+\end{tikzpicture} 
+}
+
+\newcommand{\boxNumberConf}[3]
+{\drawBox{#1}{#2}{#3} & #1 (#2--#3)} % NOTICE the & for column separation
+
+\begin{document}
+
+\begin{center}
+ {\Large Latex table with the TikZ package}\\
+ {Graphics to improve readability of a table}
+ \vglue 0.5cm
+ Ji\v{r}\'{i} Spilka, \today
+ \vglue 0.5cm
+\end{center}
+
+This short text introduce graphical package TikZ and how it can be used for making nice looking table. The following commands produce a box, which fill 
+corresponds to a median value. Then confidance intervals are added to the median value. The box spans one row and the actual numbers span the adjacent row. \\
+
+\noindent \textbf{Command to draw a box:}
+
+{\small
+\begin{verbatim} 
+\newcommand{\drawBox}[3]
+{
+  \begin{tikzpicture}
+  \def\w{1.5} % width of a box
+  \def\x{#1/100*\w} % median value
+  \def\xl{#2/100*\w} % lower confidance interval
+  \def\xu{#3/100*\w} % upper confidance interval
+  % draw rectangle (black border)
+  \filldraw[fill=gray!#1!white!, draw=black] (0,0) rectangle (\x,0.2); 
+  \draw [gray] (0,0) rectangle (\w,0.2); % fill with the grey
+  % draw  upper confidance interval
+  \draw (\x,0.1) -- (\xu,0.1) -- (\xu,0.15) -- (\xu,0.05);
+  % draw lower confidance interval
+  \draw (\x,0.1) -- (\xl,0.1) -- (\xl,0.15) -- (\xl,0.05); 
+  \end{tikzpicture} 
+}
+\end{verbatim}
+}
+
+\noindent \textbf{The interface command for tables:}
+{\small
+\begin{verbatim}
+  \newcommand{\boxNumberConf}[3]
+  % NOTICE the & for a column separation
+  {\drawBox{#1}{#2}{#3} & #1 (#2--#3)} 
+\end{verbatim}
+}
+
+\noindent \textbf{Example of use:}
+{\small
+\begin{verbatim} 
+  \boxNumberConf{50}{45}{55} % {median}{lower CI}{upper CI}
+\end{verbatim}
+}
+
+\noindent \textbf{Example of results presentation in Table~\ref{tab:classification_feature_sel}:}
+
+\begin{table}[ht!]\small
+\centering
+\caption{\label{tab:classification_feature_sel} Classification results for 
+different groups. The results are average across all folds of CV (50x4 folds CV) and presented using median (25th -- 75th) percentiles.}
+
+\begin{tabular}{p{1.5cm} r lr lr lr}
+\toprule
+Feature set&[\%]&  \multicolumn{2}{c}{NaiveBayes} &  \multicolumn{2}{c}{SVM} & \multicolumn{2}{c}{C4.5 Tree}\\
+\midrule
+\multirow{4}{1.5cm}{HRV-based} 
+&SE & \boxNumberConf{53}{47}{63} &  \boxNumberConf{53}{44}{60} & \boxNumberConf{47}{40}{60}\\
+&SP & \boxNumberConf{74}{71}{77} &  \boxNumberConf{76}{72}{79} & \boxNumberConf{75}{70}{79}\\
+&PR & \boxNumberConf{21}{18}{24} &  \boxNumberConf{21}{18}{24} & \boxNumberConf{19}{16}{23}\\
+&F  & \boxNumberConf{30}{27}{34} &  \boxNumberConf{29}{25}{34} & \boxNumberConf{28}{23}{32}\\
+\midrule
+\multirow{4}{1.5cm}{Complete set}
+&SE & \boxNumberConf{60}{53}{67} &  \boxNumberConf{53}{47}{60} & \boxNumberConf{38}{27}{47}\\
+&SP & \boxNumberConf{75}{72}{77} &  \boxNumberConf{78}{75}{80} & \boxNumberConf{81}{75}{85}\\
+&PR & \boxNumberConf{23}{20}{25} &  \boxNumberConf{23}{20}{26} & \boxNumberConf{19}{15}{23}\\
+&F  & \boxNumberConf{33}{29}{36} &  \boxNumberConf{33}{28}{37} & \boxNumberConf{25}{19}{31}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+\noindent \textbf{Latex code for minimal working example}
+
+\begin{verbatim}
+  \documentclass[a4paper,11pt,oneside]{report}
+  \usepackage[english]{babel}
+
+  \usepackage{tikz}
+
+  \newcommand{\drawBox}[3] % drawing the bog
+  {
+  \begin{tikzpicture} 
+  \def\w{1.5} % width of a box
+  \def\x{#1/100*\w} % median value
+  \def\xl{#2/100*\w} % lower confidance interval
+  \def\xu{#3/100*\w} % upper confidance interval
+  \filldraw[fill=gray!#1!white!, draw=black] (0,0) rectangle (\x,0.2);
+  \draw [gray] (0,0) rectangle (\w,0.2); % fill with the grey
+  \draw (\x,0.1) -- (\xu,0.1) -- (\xu,0.15) -- (\xu,0.05);
+  \draw (\x,0.1) -- (\xl,0.1) -- (\xl,0.15) -- (\xl,0.05);
+  \end{tikzpicture} 
+  }
+
+  \newcommand{\boxNumberConf}[3] % inteface command
+  {\drawBox{#1}{#2}{#3} & #1 (#2--#3)} % NOTICE the & for col. sep.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{document}
+
+  \begin{tabular}{l r lr}
+  & \multicolumn{2}{c}{mean (95\% CI)} \\
+  Sensitivity & \boxNumberConf{74}{65}{81} \\
+  Specificity & \boxNumberConf{90}{81}{95} \\
+  \end{tabular}
+
+  \end{document}
+\end{verbatim}
+
+\noindent \textbf{Results of the minimal example: }
+
+\begin{tabular}{l r lr}
+  & \multicolumn{2}{c}{mean (95\% CI)} \\
+  Sensitivity & \boxNumberConf{74}{65}{81} \\
+  Specificity & \boxNumberConf{90}{81}{95} \\
+\end{tabular}
+
+\end{document}
