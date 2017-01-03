@@ -44,10 +44,11 @@
  \vglue 0.5cm
 \end{center}
 
-This short text introduce graphical package TikZ and how it can be used for making nice looking table. The following commands produce a box, which fill 
-corresponds to a median value. Then confidance intervals are added to the median value. The box spans one row and the actual numbers span the adjacent row. \\
+The graphical package TikZ can be used in easy way to provide fancy looking table with improved readability.
+The following commands produce a box, which fill corresponds to a median value.
+Then confidence intervals are added to the median value. The box spans one row and the actual numbers span the adjacent row. \\
 
-\noindent \textbf{Command to draw a box:}
+\noindent \textbf{Commands to draw a box:}
 
 {\small
 \begin{verbatim} 
@@ -90,8 +91,7 @@ corresponds to a median value. Then confidance intervals are added to the median
 
 \begin{table}[ht!]\small
 \centering
-\caption{\label{tab:classification_feature_sel} Classification results for 
-different groups. The results are average across all folds of CV (50x4 folds CV) and presented using median (25th -- 75th) percentiles.}
+\caption{\label{tab:classification_feature_sel} Example of a table. The results are average across all cross validation folds and presented using median and 25th -- 75th percentiles.}
 
 \begin{tabular}{p{1.5cm} r lr lr lr}
 \toprule
@@ -113,7 +113,7 @@ Feature set&[\%]&  \multicolumn{2}{c}{NaiveBayes} &  \multicolumn{2}{c}{SVM} & \
 \end{table}
 
 \newpage
-\noindent \textbf{Latex code for minimal working example}
+\noindent \textbf{Latex code for a minimal working example}
 
 \begin{verbatim}
   \documentclass[a4paper,11pt,oneside]{report}
@@ -135,7 +135,7 @@ Feature set&[\%]&  \multicolumn{2}{c}{NaiveBayes} &  \multicolumn{2}{c}{SVM} & \
   \end{tikzpicture} 
   }
 
-  \newcommand{\boxNumberConf}[3] % inteface command
+  \newcommand{\boxNumberConf}[3] % interface command
   {\drawBox{#1}{#2}{#3} & #1 (#2--#3)} % NOTICE the & for col. sep.
 
   %%%%%%%%%%%%%%%%%%%%%%%%
@@ -160,3 +160,8 @@ Feature set&[\%]&  \multicolumn{2}{c}{NaiveBayes} &  \multicolumn{2}{c}{SVM} & \
 \end{tabular}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
